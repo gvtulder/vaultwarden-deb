@@ -1,0 +1,5 @@
+vaultwarden-web-vault (2.25.0-1) unstable; urgency=medium
+ 
+  * Update to upstream version 2.25.0.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Sun, 19 Dec 2021 18:00:00 +0100

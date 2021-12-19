@@ -1,0 +1,16 @@
+Source: vaultwarden
+Section: web
+Priority: optional
+Maintainer: Gijs van Tulder <gvtulder@gmail.com>
+Standards-Version: 4.5.1
+Homepage: https://github.com/dani-garcia/vaultwarden
+Rules-Requires-Root: no
+
+Package: vaultwarden
+Architecture: amd64
+Depends: vaultwarden-web-vault (>= 2.25.0)
+Description: Unofficial Bitwarden compatible server written in Rust
+ Alternative implementation of the Bitwarden server API written in
+ Rust and compatible with upstream Bitwarden clients*, perfect for
+ self-hosted deployment where running the official resource-heavy
+ service might not be ideal.

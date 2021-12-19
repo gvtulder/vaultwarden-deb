@@ -1,0 +1,11 @@
+Source: vaultwarden-web-vault
+Section: web
+Priority: optional
+Maintainer: Gijs van Tulder <gvtulder@gmail.com>
+Standards-Version: 4.5.1
+Homepage: https://github.com/dani-garcia/bw_web_builds
+Rules-Requires-Root: no
+
+Package: vaultwarden-web-vault
+Architecture: all
+Description: Web vault for the Vaultwarden server

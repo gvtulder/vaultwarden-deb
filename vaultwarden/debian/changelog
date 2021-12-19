@@ -1,0 +1,12 @@
+vaultwarden (1.23.1-1) unstable; urgency=medium
+ 
+  * Update to upstream version 1.23.1.
+  * Add email notifications for incomplete 2FA logins by @jjlin in #2067
+  * Fix conflict resolution logic for read_only and hide_passwords flags by @jjlin in #2073
+  * Fix missing encrypted key after emergency access reject by @jjlin in #2078
+  * Fix PostgreSQL migration by @jjlin in #2080
+  * Macro recursion decrease and other optimizations by @BlackDex in #2084
+  * Enabled trust-dns and some updates. by @BlackDex in #2125
+  * Update web vault to 2.25.0
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Sun, 19 Dec 2021 18:00:00 +0100
