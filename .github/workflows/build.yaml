@@ -1,4 +1,4 @@
-name: Build Webvault .deb packages
+name: Build Vaultwarden .deb packages
 
 on: push
 
