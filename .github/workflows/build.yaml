@@ -1,0 +1,73 @@
+name: Build Webvault .deb packages
+
+on: push
+
+jobs:
+  build-debs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install dependencies
+      run: |
+        sudo apt-get -q update
+        sudo apt-get -qy install debhelper dpkg-sig
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Import GPG key
+      id: import_gpg
+      uses: gvtulder/ghaction-import-gpg@master
+      with:
+        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+        passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Build vaultwarden .deb
+      run: |
+        cd vaultwarden/
+        make deb
+
+    - name: Build vaultwarden-web-vault .deb
+      run: |
+        cd vaultwarden-web-vault/
+        make deb
+
+    - name: Sign .deb files
+      run: |
+        dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder *.deb
+
+    - name: Create APT repository
+      run: |
+        mkdir -p repo/
+        cd repo/
+        cp ../*.deb .
+        apt-ftparchive packages . > Packages
+        bzip2 -kf Packages
+        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" -o APT::FTPArchive::Release::Codename="./" -o APT::FTPArchive::Release::Acquire-By-Hash="yes" release . > Release
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} -o Release.gpg --digest-algo sha256 Release
+        cd ..
+
+    - name: Export public key
+      run: |
+        gpg --export ${{ steps.import_gpg.outputs.keyid }} > webvault-archive-keyring.gpg
+        gpg --armor --export ${{ steps.import_gpg.outputs.keyid }} > webvault-archive-keyring.asc
+
+    - name: Archive .deb files
+      uses: actions/upload-artifact@v2
+      with:
+        name: deb-files
+        path: ./*.deb
+
+    - name: Archive public key
+      uses: actions/upload-artifact@v2
+      with:
+        name: public-keys
+        path: |
+          ./*.gpg
+          ./*.asc
+
+    - name: Archive APT repository
+      uses: actions/upload-artifact@v2
+      with:
+        name: apt-repo
+        path: repo/
