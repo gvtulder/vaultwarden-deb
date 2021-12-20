@@ -1,5 +1,13 @@
+vaultwarden (1.23.1-2) unstable; urgency=medium
+
+  * Vaultwarden had no permission to write to /var/log/vaultwarden
+  * Upstream version 1.23.1.
+  * Upstream web vault 2.25.0.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Sun, 19 Dec 2021 20:00:00 +0100
+
 vaultwarden (1.23.1-1) unstable; urgency=medium
- 
+
   * Update to upstream version 1.23.1.
   * Add email notifications for incomplete 2FA logins by @jjlin in #2067
   * Fix conflict resolution logic for read_only and hide_passwords flags by @jjlin in #2073
