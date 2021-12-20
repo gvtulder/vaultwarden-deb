@@ -60,10 +60,8 @@ jobs:
 
     - name: Export public key
       run: |
-        gpg --export ${{ steps.import_gpg.outputs.keyid }} > webvault-archive-keyring.gpg
-        gpg --armor --export ${{ steps.import_gpg.outputs.keyid }} > webvault-archive-keyring.asc
-        cp webvault-archive-keyring.gpg repo/
-        cp webvault-archive-keyring.asc repo/
+        gpg --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.gpg
+        gpg --armor --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.asc
 
     - name: Archive .deb files, public keys, APT files
       uses: actions/upload-artifact@v2
