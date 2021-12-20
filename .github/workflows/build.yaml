@@ -74,15 +74,99 @@ jobs:
     - name: Archive .deb files, public keys, APT files
       uses: actions/upload-artifact@v2
       with:
-        name: output
+        name: output-${{ matrix.debian }}
         path: repo/
 
-    - name: Upload files to GitHub release
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+#   - name: Upload files to GitHub release
+#     env:
+#       GITHUB_TOKEN: ${{ github.token }}
+#     run: |
+#       python -u update-repo-release.py \
+#           --target-owner gvtulder \
+#           --target-project vaultwarden-deb \
+#           --target-release apt-${{ matrix.debian }} \
+#           --source-dir repo
+
+  build-repo:
+    runs-on: ubuntu-latest
+    needs: build-debs
+
+    steps:
+    - name: Install dependencies
       run: |
-        python -u update-repo-release.py \
-            --target-owner gvtulder \
-            --target-project vaultwarden-deb \
-            --target-release apt-${{ matrix.debian }} \
-            --source-dir repo
+        sudo apt-get -q update
+        sudo apt-get -qy install debhelper dpkg-sig
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Import GPG key
+      id: import_gpg
+      uses: gvtulder/ghaction-import-gpg@master
+      with:
+        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+        passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Download all workflow run artifacts
+      uses: actions/download-artifact@v2
+      with:
+        path: repo-src/
+
+    - name: Show all files
+      run: |
+        find
+
+    - name: Create combined repository
+      run: |
+        mkdir -p repo/dists/buster
+        cp -r repo-src/output-buster/*.deb repo/dists/buster/
+
+        mkdir -p repo/dists/bullseye
+        cp -r repo-src/output-bullseye/*.deb repo/dists/bullseye/
+
+        cd repo/
+
+        apt-ftparchive packages dists/buster > dists/buster/Packages
+        apt-ftparchive packages dists/bullseye > dists/bullseye/Packages
+
+        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
+                       -o APT::FTPArchive::Release::Codename="buster" \
+                       -o APT::FTPArchive::Release::Architectures="amd64" \
+                       release dists/buster > dists/buster/Releases
+
+        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
+                       -o APT::FTPArchive::Release::Codename="bullseye" \
+                       -o APT::FTPArchive::Release::Architectures="amd64" \
+                       release dists/bullseye > dists/bullseye/Releases
+
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                       -o dists/buster/Release.gpg \
+                       --digest-algo sha256 dists/buster/Release
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                       --clearsign -o dists/buster/InRelease \
+                       --digest-algo sha256 dists/buster/Release
+
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                       -o dists/bullseye/Release.gpg \
+                       --digest-algo sha256 dists/bullseye/Release
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                       --clearsign -o dists/bullseye/InRelease \
+                       --digest-algo sha256 dists/bullseye/Release
+
+        cd ..
+
+    - name: Archive repository files
+      uses: actions/upload-artifact@v2
+      with:
+        name: combined-repository
+        path: repo/
