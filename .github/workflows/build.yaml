@@ -128,42 +128,34 @@ jobs:
 
     - name: Create combined repository
       run: |
-        mkdir -p repo/dists/buster
-        cp -r repo-src/output-buster/*.deb repo/dists/buster/
-
-        mkdir -p repo/dists/bullseye
-        cp -r repo-src/output-bullseye/*.deb repo/dists/bullseye/
-
+        mkdir -p repo
         cd repo/
 
-        apt-ftparchive packages dists/buster > dists/buster/Packages
-        apt-ftparchive packages dists/bullseye > dists/bullseye/Packages
+        for release in buster bullseye ; do
+          mkdir -p dists/$release
+          cp -r ../repo-src/output-$release/*.deb dists/$release/
 
-        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
-                       -o APT::FTPArchive::Release::Codename="buster" \
-                       -o APT::FTPArchive::Release::Architectures="amd64" \
-                       release dists/buster > dists/buster/Releases
+          apt-ftparchive packages dists/$release > dists/$release/Packages
 
-        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
-                       -o APT::FTPArchive::Release::Codename="bullseye" \
-                       -o APT::FTPArchive::Release::Architectures="amd64" \
-                       release dists/bullseye > dists/bullseye/Releases
+          apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
+                         -o APT::FTPArchive::Release::Codename=$release \
+                         -o APT::FTPArchive::Release::Architectures="amd64" \
+                         release dists/$release > dists/$release/Release
 
-        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
-                       -o dists/buster/Release.gpg \
-                       --digest-algo sha256 dists/buster/Release
-        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
-                       --clearsign -o dists/buster/InRelease \
-                       --digest-algo sha256 dists/buster/Release
-
-        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
-                       -o dists/bullseye/Release.gpg \
-                       --digest-algo sha256 dists/bullseye/Release
-        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
-                       --clearsign -o dists/bullseye/InRelease \
-                       --digest-algo sha256 dists/bullseye/Release
+          gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                         -o dists/$release/Release.gpg \
+                         --digest-algo sha256 dists/$release/Release
+          gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                         --clearsign -o dists/$release/InRelease \
+                         --digest-algo sha256 dists/$release/Release
+        done
 
         cd ..
+
+    - name: Export public key
+      run: |
+        gpg --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.gpg
+        gpg --armor --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.asc
 
     - name: Archive repository files
       uses: actions/upload-artifact@v2
