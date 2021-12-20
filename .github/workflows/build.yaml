@@ -6,6 +6,10 @@ jobs:
   build-debs:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        debian: ["buster", "bullseye"]
+
     steps:
     - name: Install dependencies
       run: |
@@ -33,9 +37,11 @@ jobs:
         passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
     - name: Build vaultwarden .deb
+      env:
+        DEBIAN_TARGET_VERSION: ${{ matrix.debian }}
       run: |
         cd vaultwarden/
-        make deb
+        ./build-in-docker.sh
 
     - name: Build vaultwarden-web-vault .deb
       run: |
@@ -58,6 +64,7 @@ jobs:
         gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} --clearsign -o InRelease --digest-algo sha256 Release
         cd ..
         cp install.sh repo/
+        sed -i "s/DEBIAN_TARGET_VERSION=[a-z]+/DEBIAN_TARGET_VERSION=${{ matrix.debian }}/" repo/install.sh
 
     - name: Export public key
       run: |
@@ -77,5 +84,5 @@ jobs:
         python -u update-repo-release.py \
             --target-owner gvtulder \
             --target-project vaultwarden-deb \
-            --target-release apt-get \
+            --target-release apt-${{ matrix.debian }} \
             --source-dir repo

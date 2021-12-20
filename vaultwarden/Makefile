@@ -1,5 +1,7 @@
 build:
-	[ -f output/vaultwarden ] || ./docker-image-extract vaultwarden/server:1.23.1-alpine
+	# [ -f output/vaultwarden ] || ./docker-image-extract vaultwarden/server:1.23.1-alpine
+	# ./build-in-docker.sh
+	echo OK
 
 install:
 	mkdir -p ${DESTDIR}/etc
@@ -7,7 +9,7 @@ install:
 	mkdir -p ${DESTDIR}/var/lib/vaultwarden
 	mkdir -p ${DESTDIR}/var/lib/vaultwarden/data
 	mkdir -p ${DESTDIR}/var/log/vaultwarden
-	cp output/vaultwarden ${DESTDIR}/usr/bin/vaultwarden
+	cp target/release/vaultwarden ${DESTDIR}/usr/bin/vaultwarden
 	cp vaultwarden.env ${DESTDIR}/etc/vaultwarden.env
 
 deb:

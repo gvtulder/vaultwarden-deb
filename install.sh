@@ -12,7 +12,8 @@ esac
 
 export GNUPGHOME="/dev/null"
 
-BASEURL=https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-get
+DEBIAN_TARGET_VERSION=bullseye
+BASEURL=https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-${DEBIAN_TARGET_VERSION}
 KEYNAME=vaultwarden-deb-repo-keyring.gpg
 GPGKEY=$BASEURL/$KEYNAME
 KEYRING=/usr/share/keyrings/$KEYNAME
