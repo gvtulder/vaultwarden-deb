@@ -14,6 +14,7 @@ export GNUPGHOME="/dev/null"
 
 DEBIAN_TARGET_VERSION=bullseye
 BASEURL=https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-${DEBIAN_TARGET_VERSION}
+RELEASE=./
 KEYNAME=vaultwarden-deb-repo-keyring.gpg
 GPGKEY=$BASEURL/$KEYNAME
 KEYRING=/usr/share/keyrings/$KEYNAME
@@ -29,7 +30,7 @@ fi
 sudo chmod 644 $KEYRING
 
 cat << EOF | sudo tee /etc/apt/sources.list.d/vaultwarden-deb-repo.list
-deb [signed-by=$KEYRING by-hash=force] $BASEURL ./
+deb [signed-by=$KEYRING by-hash=force] $BASEURL $RELEASE
 EOF
 
 sudo apt-get clean
