@@ -17,7 +17,7 @@ files = [os.path.basename(filename)
 existing_assets = {}
 for asset in release.assets():
     existing_assets[asset.name] = asset
-for filename in glob.glob(os.path.join(_from, '*')):
+for filename in glob.glob(os.path.join(args.source_dir, '*')):
     if os.path.isfile(filename):
         name = os.path.basename(filename)
         print('->', name)

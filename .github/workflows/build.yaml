@@ -57,6 +57,7 @@ jobs:
         gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} -o Release.gpg --digest-algo sha256 Release
         gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} --clearsign -o InRelease --digest-algo sha256 Release
         cd ..
+        cp install.sh repo/
 
     - name: Export public key
       run: |
