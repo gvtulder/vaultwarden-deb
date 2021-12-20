@@ -19,14 +19,14 @@ Use `apt-get install vaultwarden` to install both.
 
 To install Vaultwarden and add this repository, run this for Debian 11 (bullseye):
 ```bash
-wget -qO- https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-bullseye/install.sh | sudo bash
+wget -qO- https://vaultwarden-deb.pages.dev/dists/bullseye/install.sh | sudo bash
 sudo apt update
 sudo apt install vaultwarden
 ```
 
 For Debian 10 (buster):
 ```bash
-wget -qO- https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-buster/install.sh | sudo bash
+wget -qO- https://vaultwarden-deb.pages.dev/dists/buster/install.sh | sudo bash
 sudo apt update
 sudo apt install vaultwarden
 ```

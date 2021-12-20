@@ -1,7 +1,6 @@
 #!/bin/bash
 # download the repository files for Cloudflare Pages
 set -e
-set -x
 
 wget https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-get/repo.tar.gz
 tar xzvf repo.tar.gz
@@ -15,7 +14,7 @@ done
 
 cd repo/
 
-cat <<EOF >> index.html
+cat <<EOF > index.html
 <html>
 <head><title>Vaultwarden deb repository</title></head>
 <body>
@@ -29,13 +28,15 @@ See the <a href="https://github.com/gvtulder/vaultwarden-deb/">GitHub repository
 <p>
 Files:
 </p>
-<pre>
+<ul>
 EOF
 
-find -type f | sort >> index.html
+find * -type f | sort -u | while read filename ; do
+  echo '  <li><a href="'$filename'">'$filename'</a></li>' >> index.html
+done
 
 cat <<EOF >> index.html
-</pre>
+</ul>
 </html>
 EOF
 
