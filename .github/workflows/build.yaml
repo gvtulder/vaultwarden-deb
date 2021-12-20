@@ -162,3 +162,15 @@ jobs:
       with:
         name: combined-repository
         path: repo/
+
+    - name: Upload files to GitHub release
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        mkdir repo-combined
+        tar czvf repo-combined/repo.tar.gz repo/
+        python -u update-repo-release.py \
+            --target-owner gvtulder \
+            --target-project vaultwarden-deb \
+            --target-release apt-get \
+            --source-dir repo-combined
