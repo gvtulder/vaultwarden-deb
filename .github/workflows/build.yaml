@@ -45,6 +45,7 @@ jobs:
         bzip2 -kf Packages
         apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" -o APT::FTPArchive::Release::Codename="./" -o APT::FTPArchive::Release::Acquire-By-Hash="yes" release . > Release
         gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} -o Release.gpg --digest-algo sha256 Release
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} --clearsign -o InRelease --digest-algo sha256 Release
         cd ..
 
     - name: Export public key
