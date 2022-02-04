@@ -7,7 +7,7 @@ Copyright: 2018-2021 Vaultwarden developers
 License: GPL-3
 
 Files: debian/*
-Copyright: 2021 Gijs van Tulder <gvtulder@gmail.com>
+Copyright: 2022 Gijs van Tulder <gvtulder@gmail.com>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

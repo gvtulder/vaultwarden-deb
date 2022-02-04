@@ -2,7 +2,7 @@
 set -e
 set -x
 
-SOURCE_URL=https://github.com/dani-garcia/vaultwarden/archive/refs/tags/1.23.1.tar.gz
+SOURCE_URL=https://github.com/dani-garcia/vaultwarden/archive/refs/tags/1.24.0.tar.gz
 RUST_IMAGE=rust:1.55-${DEBIAN_TARGET_VERSION}
 
 # download latest source
