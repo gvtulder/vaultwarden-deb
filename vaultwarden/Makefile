@@ -1,5 +1,5 @@
 build:
-	# [ -f output/vaultwarden ] || ./docker-image-extract vaultwarden/server:1.24.0-alpine
+	# [ -f output/vaultwarden ] || ./docker-image-extract vaultwarden/server:1.25.0-alpine
 	# ./build-in-docker.sh
 	echo OK
 
