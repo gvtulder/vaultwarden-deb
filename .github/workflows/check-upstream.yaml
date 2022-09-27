@@ -1,0 +1,39 @@
+name: Check upstream vaultwarden repository
+
+on: workflow_dispatch
+
+jobs:
+  check-upstream-version:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Get latest versions
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        python generate-files.py
+
+    - name: Commit any changes
+      run: |
+        if [[ ${VW_HAS_UPDATE} == true ]] ; then
+          echo "Upstream update found."
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git add vaultwarden-web-vault/debian/changelog vaultwarden/debian/changelog vaultwarden/debian/control
+          git status
+          git commit -m "Update to server ${VW_SERVER_VERSION} and web vault ${VW_WEB_VERSION}."
+          git push
+        fi
