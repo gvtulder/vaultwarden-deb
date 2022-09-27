@@ -184,3 +184,14 @@ jobs:
             --target-project vaultwarden-deb \
             --target-release apt-get \
             --source-dir repo-combined
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-repo
+
+    steps:
+      - name: Deploy to Cloudflare
+        env:
+          CLOUDFLARE_DEPLOY_HOOK: ${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}
+        run: |
+          curl -X POST "${CLOUDFLARE_DEPLOY_HOOK}"
