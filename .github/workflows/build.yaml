@@ -36,9 +36,17 @@ jobs:
         gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
         passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
+    - name: Get latest versions
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      run: |
+        python generate-files.py
+
     - name: Build vaultwarden .deb
       env:
         DEBIAN_TARGET_VERSION: ${{ matrix.debian }}
+        VW_SERVER_VERSION: ${{ env.VW_SERVER_VERSION }}
+        VW_WEB_VERSION: ${{ env.VW_WEB_VERSION }}
       run: |
         cd vaultwarden/
         ./build-in-docker.sh
