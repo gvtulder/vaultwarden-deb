@@ -37,3 +37,4 @@ jobs:
           git commit -m "Update to server ${VW_SERVER_VERSION} and web vault ${VW_WEB_VERSION}."
           git push
         fi
+

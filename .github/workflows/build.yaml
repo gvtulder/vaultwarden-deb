@@ -1,6 +1,8 @@
 name: Build Vaultwarden .deb packages
 
-on: push
+on:
+  - workflow_dispatch
+  - workflow_call
 
 jobs:
   build-debs:
