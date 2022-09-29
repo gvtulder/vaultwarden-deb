@@ -2,8 +2,8 @@
 # download the repository files for Cloudflare Pages
 set -e
 
-wget https://github.com/gvtulder/vaultwarden-deb/releases/download/apt-get/repo.tar.gz
-tar xzvf repo.tar.gz
+mkdir -p repo
+./sync-s3.sh s3://${AWS_S3_BUCKET}/ repo/
 
 for release in buster bullseye ; do
   cp install.sh repo/dists/$release/install.sh
