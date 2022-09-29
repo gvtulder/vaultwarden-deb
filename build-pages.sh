@@ -12,6 +12,8 @@ for release in buster bullseye ; do
   sed -i 's/RELEASE=.\+/RELEASE="'$release' main"/' repo/dists/$release/install.sh
 done
 
+cp 404.html repo/
+
 cd repo/
 
 cat <<EOF > index.html
