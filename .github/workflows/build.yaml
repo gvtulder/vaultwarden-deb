@@ -170,15 +170,16 @@ jobs:
         cd repo/
 
         for release in buster bullseye ; do
-          mkdir -p dists/$release
-          cp -r ../repo-src/output-$release/*.deb dists/$release/
+          mkdir -p dists/$release/main/binary-amd64/
+          cp -r ../repo-src/output-$release/*.deb dists/$release/main/binary-amd64/
 
           apt-ftparchive packages dists/$release > dists/$release/Packages
 
           apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
                          -o APT::FTPArchive::Release::Codename=$release \
                          -o APT::FTPArchive::Release::Architectures="amd64" \
-                         release dists/$release > dists/$release/Release
+                         -o APT::FTPArchive::Release::Components="main" \
+                         release dists/main/binary-amd64/$release > dists/$release/main/binary-amd64/Release
 
           gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
                          -o dists/$release/Release.gpg \
