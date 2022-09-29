@@ -126,6 +126,7 @@ jobs:
                        -o APT::FTPArchive::Release::Codename=${{ matrix.debian }} \
                        -o APT::FTPArchive::Release::Architectures="${{ matrix.debian-arch }}" \
                        -o APT::FTPArchive::Release::Components="main" \
+                       -o APT::FTPArchive::DoByHash=true \
                        release dists/${{ matrix.debian }} > dists/${{ matrix.debian }}/Release
 
         gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
