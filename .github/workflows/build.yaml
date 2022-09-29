@@ -32,6 +32,7 @@ jobs:
           exit 1
         fi
 
+
   build-debs:
     runs-on: ubuntu-latest
     needs: check-version
@@ -39,6 +40,7 @@ jobs:
     strategy:
       matrix:
         debian: ["buster", "bullseye"]
+        debian-arch: ["amd64"]
 
     steps:
     - name: Install dependencies
@@ -72,42 +74,78 @@ jobs:
       run: |
         python generate-files.py
 
+    - name: Download previous deb files
+      env:
+        AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: auto
+      run: |
+        mkdir -p repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}
+        ./sync-s3.sh s3://${{ secrets.AWS_S3_BUCKET }}/dists/${{ matrix.debian }} repo/dists/${{ matrix.debian }}
+
     - name: Build vaultwarden .deb
       env:
         DEBIAN_TARGET_VERSION: ${{ matrix.debian }}
         VW_SERVER_VERSION: ${{ env.VW_SERVER_VERSION }}
         VW_WEB_VERSION: ${{ env.VW_WEB_VERSION }}
       run: |
-        cd vaultwarden/
-        ./build-in-docker.sh
+        if [[ ! -f repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/vaultwarden_${{ env.VW_SERVER_VERSION_CLEAN }}-1_${{ matrix.debian-arch }}.deb ]] ; then
+          cd vaultwarden/
+          ./build-in-docker.sh
+          dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder vaultwarden_*.deb
+          mv vaultwarden_*.deb ../repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/
+          cd ..
+        fi
 
     - name: Build vaultwarden-web-vault .deb
       run: |
-        cd vaultwarden-web-vault/
-        make deb
-
-    - name: Sign .deb files
-      run: |
-        dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder *.deb
-
-    - name: Create APT repository
-      run: |
-        mkdir -p repo/
-        cd repo/
-        cp ../*.deb .
-        apt-ftparchive packages . > Packages
-        bzip2 -kf Packages
-        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" -o APT::FTPArchive::Release::Codename="./" -o APT::FTPArchive::Release::Acquire-By-Hash="yes" release . > Release
-        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} -o Release.gpg --digest-algo sha256 Release
-        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} --clearsign -o InRelease --digest-algo sha256 Release
-        cd ..
-        cp install.sh repo/
-        sed -i "s/DEBIAN_TARGET_VERSION=[a-z]+/DEBIAN_TARGET_VERSION=${{ matrix.debian }}/" repo/install.sh
+        if [[ ! -f repo/dists/${{ matrix.DEBIAN }}/main/binary-${{ matrix.debian-arch }}/vaultwarden-web-vault_${{ env.VW_WEB_VERSION_CLEAN }}-1_all.deb ]] ; then
+          cd vaultwarden-web-vault/
+          make deb
+          dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder ../vaultwarden-web-vault_*.deb
+          mv ../vaultwarden-web-vault_*.deb ../repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/
+          cd ..
+        fi
 
     - name: Export public key
       run: |
         gpg --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.gpg
         gpg --armor --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.asc
+
+    - name: Create APT repository
+      run: |
+        cd repo/
+
+        apt-ftparchive packages dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }} > dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/Packages
+
+        bzip2 -kf dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/Packages
+
+        apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
+                       -o APT::FTPArchive::Release::Codename=${{ matrix.debian }} \
+                       -o APT::FTPArchive::Release::Architectures="${{ matrix.debian-arch }}" \
+                       -o APT::FTPArchive::Release::Components="main" \
+                       release dists/${{ matrix.debian }} > dists/${{ matrix.debian }}/Release
+
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                       -o dists/${{ matrix.debian }}/Release.gpg \
+                       --digest-algo sha256 dists/${{ matrix.debian }}/Release
+        gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
+                       --clearsign -o dists/${{ matrix.debian }}/InRelease \
+                       --digest-algo sha256 dists/${{ matrix.debian }}/Release
+
+        cd ..
+
+    - name: Upload updated repo
+      env:
+        AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: auto
+      run: |
+        ./sync-s3.sh repo/dists/${{ matrix.debian }} s3://${{ secrets.AWS_S3_BUCKET }}/dists/${{ matrix.debian }}
 
     - name: Archive .deb files, public keys, APT files
       uses: actions/upload-artifact@v2
@@ -115,15 +153,6 @@ jobs:
         name: output-${{ matrix.debian }}
         path: repo/
 
-#   - name: Upload files to GitHub release
-#     env:
-#       GITHUB_TOKEN: ${{ github.token }}
-#     run: |
-#       python -u update-repo-release.py \
-#           --target-owner gvtulder \
-#           --target-project vaultwarden-deb \
-#           --target-release apt-${{ matrix.debian }} \
-#           --source-dir repo
 
   build-repo:
     runs-on: ubuntu-latest
@@ -158,38 +187,11 @@ jobs:
     - name: Download all workflow run artifacts
       uses: actions/download-artifact@v2
       with:
-        path: repo-src/
+        path: repo/
 
     - name: Show all files
       run: |
         find
-
-    - name: Create combined repository
-      run: |
-        mkdir -p repo
-        cd repo/
-
-        for release in buster bullseye ; do
-          mkdir -p dists/$release/main/binary-amd64/
-          cp -r ../repo-src/output-$release/*.deb dists/$release/main/binary-amd64/
-
-          apt-ftparchive packages dists/$release > dists/$release/Packages
-
-          apt-ftparchive -o APT::FTPArchive::AlwaysStat="true" \
-                         -o APT::FTPArchive::Release::Codename=$release \
-                         -o APT::FTPArchive::Release::Architectures="amd64" \
-                         -o APT::FTPArchive::Release::Components="main" \
-                         release dists/main/binary-amd64/$release > dists/$release/main/binary-amd64/Release
-
-          gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
-                         -o dists/$release/Release.gpg \
-                         --digest-algo sha256 dists/$release/Release
-          gpg --yes -abs -u ${{ steps.import_gpg.outputs.keyid }} \
-                         --clearsign -o dists/$release/InRelease \
-                         --digest-algo sha256 dists/$release/Release
-        done
-
-        cd ..
 
     - name: Export public key
       run: |
@@ -213,6 +215,7 @@ jobs:
             --target-project vaultwarden-deb \
             --target-release apt-get \
             --source-dir repo-combined
+
 
   deploy:
     runs-on: ubuntu-latest

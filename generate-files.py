@@ -83,6 +83,8 @@ if current_server_version != server_version_clean:
 with open(os.getenv('GITHUB_ENV', 'github.env'), 'w') as f:
     f.write('VW_SERVER_VERSION=%s\n' % server_version)
     f.write('VW_WEB_VERSION=%s\n' % web_version)
+    f.write('VW_SERVER_VERSION_CLEAN=%s\n' % server_version_clean)
+    f.write('VW_WEB_VERSION_CLEAN=%s\n' % web_version_clean)
     if any_updates:
         f.write('VW_HAS_UPDATE=true\n')
 

@@ -17,5 +17,5 @@ docker cp vw:/out .
 docker rm vw
 docker image rm vaultwarden
 
-mv out/vaultwarden_*.deb ..
+mv out/vaultwarden_*.deb .
 

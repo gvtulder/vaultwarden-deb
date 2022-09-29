@@ -1,1 +1,2 @@
-github3.py
+github3.py==3.2.0
+awscli==1.25.83
