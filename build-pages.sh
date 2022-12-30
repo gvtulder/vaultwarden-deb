@@ -33,7 +33,7 @@ Files:
 <ul>
 EOF
 
-find * -type f | sort -u | while read filename ; do
+find * -type f | sort --version-sort | grep -v by-hash | grep -v .html | while read filename ; do
   echo '  <li><a href="'$filename'">'$filename'</a></li>' >> index.html
 done
 
