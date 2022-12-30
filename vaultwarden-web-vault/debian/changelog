@@ -1,3 +1,10 @@
+vaultwarden-web-vault (2022.12.0-2) unstable; urgency=medium
+
+  * Update to upstream version v2022.12.0.
+  * Use gzip compression instead of zstd in the deb package.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Thu, 30 Dec 2022 16:00:00 +0000
+
 vaultwarden-web-vault (2022.12.0-1) unstable; urgency=medium
 
   * Update to upstream version v2022.12.0.

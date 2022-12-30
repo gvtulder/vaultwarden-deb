@@ -90,8 +90,10 @@ jobs:
         DEBIAN_TARGET_VERSION: ${{ matrix.debian }}
         VW_SERVER_VERSION: ${{ env.VW_SERVER_VERSION }}
         VW_WEB_VERSION: ${{ env.VW_WEB_VERSION }}
+        VW_SERVER_VERSION_DEB: ${{ env.VW_SERVER_VERSION_DEB }}
+        VW_WEB_VERSION_DEB: ${{ env.VW_WEB_VERSION_DEB }}
       run: |
-        if [[ ! -f repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/vaultwarden_${{ env.VW_SERVER_VERSION_CLEAN }}-1_${{ matrix.debian-arch }}.deb ]] ; then
+        if [[ ! -f repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/vaultwarden_${{ env.VW_SERVER_VERSION_DEB }}_${{ matrix.debian-arch }}.deb ]] ; then
           cd vaultwarden/
           ./build-in-docker.sh
           dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder vaultwarden_*.deb
@@ -101,7 +103,7 @@ jobs:
 
     - name: Build vaultwarden-web-vault .deb
       run: |
-        if [[ ! -f repo/dists/${{ matrix.DEBIAN }}/main/binary-${{ matrix.debian-arch }}/vaultwarden-web-vault_${{ env.VW_WEB_VERSION_CLEAN }}-1_all.deb ]] ; then
+        if [[ ! -f repo/dists/${{ matrix.DEBIAN }}/main/binary-${{ matrix.debian-arch }}/vaultwarden-web-vault_${{ env.VW_WEB_VERSION_DEB }}_all.deb ]] ; then
           cd vaultwarden-web-vault/
           make deb
           dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder ../vaultwarden-web-vault_*.deb

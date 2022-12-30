@@ -32,9 +32,10 @@ any_updates = False
 # update web vault changelog
 with open('vaultwarden-web-vault/debian/changelog', 'r') as f:
     web_changelog = f.read()
-m = re.match('vaultwarden-web-vault \(([0-9.]+)-[0-9]+\)', web_changelog)
+m = re.match('vaultwarden-web-vault \(([0-9.]+)-([0-9]+)\)', web_changelog)
 assert m
 current_web_version = m.group(1)
+web_version_deb = '%s-%s' % (m.group(1), m.group(2))
 print('vaultwarden-web-vault: current version %s' % current_web_version)
 if current_web_version != web_version_clean:
     any_updates = True
@@ -48,13 +49,17 @@ if current_web_version != web_version_clean:
         f.write('\n')
         f.write(web_changelog)
 
+    # set deb version
+    web_version_deb = '%s-1' % web_version_clean
+
 
 # update server changelog
 with open('vaultwarden/debian/changelog', 'r') as f:
     server_changelog = f.read()
-m = re.match('vaultwarden \(([0-9.]+)-[0-9]+\)', server_changelog)
+m = re.match('vaultwarden \(([0-9.]+)-([0-9]+)\)', server_changelog)
 assert m
 current_server_version = m.group(1)
+server_version_deb = '%s-%s' % (m.group(1), m.group(2))
 print('vaultwarden: current version %s' % current_server_version)
 if current_server_version != server_version_clean:
     any_updates = True
@@ -78,6 +83,9 @@ if current_server_version != server_version_clean:
     with open('vaultwarden/debian/control', 'w') as f:
         f.write(server_control)
 
+    # set deb version
+    server_version_deb = '%s-1' % server_version_clean
+
 
 # write GitHub environment variables
 with open(os.getenv('GITHUB_ENV', 'github.env'), 'w') as f:
@@ -85,6 +93,8 @@ with open(os.getenv('GITHUB_ENV', 'github.env'), 'w') as f:
     f.write('VW_WEB_VERSION=%s\n' % web_version)
     f.write('VW_SERVER_VERSION_CLEAN=%s\n' % server_version_clean)
     f.write('VW_WEB_VERSION_CLEAN=%s\n' % web_version_clean)
+    f.write('VW_SERVER_VERSION_DEB=%s\n' % server_version_deb)
+    f.write('VW_WEB_VERSION_DEB=%s\n' % web_version_deb)
     if any_updates:
         f.write('VW_HAS_UPDATE=true\n')
 
