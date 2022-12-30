@@ -11,7 +11,7 @@ See the [Vaultwarden](https://github.com/dani-garcia/vaultwarden) repository for
 The repository provides two packages:
 
 * `vaultwarden`, the main executable, from [dani-garcia/vaultwarden](https://github.com/dani-garcia/vaultwarden);
-* `vaultwarden-web-vault`, the Bitwarden web vault, from [dani-garcia/vaultwarden](https://github.com/dani-garcia/bw_web_builds).
+* `vaultwarden-web-vault`, the Bitwarden web vault, from [dani-garcia/bw_web_builds](https://github.com/dani-garcia/bw_web_builds).
 
 Use `apt-get install vaultwarden` to install both.
 
