@@ -1,3 +1,9 @@
+vaultwarden-web-vault (2023.1.0-1) unstable; urgency=medium
+
+  * Update to upstream version v2023.1.0.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Thu, 12 Jan 2023 19:06:33 +0000
+
 vaultwarden-web-vault (2022.12.0-3) unstable; urgency=medium
 
   * Place web-vault files under /usr/share.
