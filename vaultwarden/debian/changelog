@@ -1,3 +1,10 @@
+vaultwarden (1.28.0-1) unstable; urgency=medium
+
+  * Update to upstream version 1.28.0.
+  * Require upstream version v2023.3.0b.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Sun, 26 Mar 2023 18:35:21 +0000
+
 vaultwarden (1.27.0-3) unstable; urgency=medium
 
   * Place web-vault files under /usr/share.
