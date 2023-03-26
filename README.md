@@ -31,6 +31,13 @@ sudo apt update
 sudo apt install vaultwarden
 ```
 
+For Debian 12 (bookworm):
+```bash
+wget -qO- https://vaultwarden-deb.pages.dev/dists/bookworm/install.sh | sudo bash
+sudo apt update
+sudo apt install vaultwarden
+```
+
 The packages can also be downloaded manually from the [Releases page](https://github.com/gvtulder/vaultwarden-deb/releases).
 
 ## Important configuration
