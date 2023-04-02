@@ -1,5 +1,7 @@
 name: Check upstream vaultwarden repository
 
+concurrency: ci-check-upstream
+
 on:
   schedule:
     - cron: 15 2 * * *

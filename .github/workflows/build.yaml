@@ -1,5 +1,7 @@
 name: Build Vaultwarden .deb packages
 
+concurrency: ci-build
+
 on:
   - push
   - workflow_dispatch
