@@ -1,6 +1,9 @@
 name: Check upstream vaultwarden repository
 
-on: workflow_dispatch
+on:
+  schedule:
+    - cron: 15 2 * * *
+  workflow_dispatch:
 
 jobs:
   check-upstream-version:
