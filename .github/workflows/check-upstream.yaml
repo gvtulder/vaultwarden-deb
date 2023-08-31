@@ -43,3 +43,7 @@ jobs:
           git push
         fi
 
+    - name: Dispatch build workflow
+      uses: benc-uk/workflow-dispatch@v1
+      with:
+        workflow: build.yaml
