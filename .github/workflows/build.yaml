@@ -30,7 +30,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       run: |
         python generate-files.py
-        if [[ -f ${GITHUB_ENV} ]] ; then
+        if grep -q VW_HAS_UPDATE=true ${GITHUB_ENV} ; then
           echo "Upstream changes detected."
           exit 1
         fi
