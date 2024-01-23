@@ -31,8 +31,8 @@ case "$1" in
               vaultwarden > $OUT
         fi
 
-        chown -R vaultwarden.vaultwarden $HOME
-        chown -R vaultwarden.vaultwarden /var/log/vaultwarden
+        chown -R vaultwarden:vaultwarden $HOME
+        chown -R vaultwarden:vaultwarden /var/log/vaultwarden
         chmod 700 $HOME
     ;;
 

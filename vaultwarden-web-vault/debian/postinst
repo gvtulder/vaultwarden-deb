@@ -30,7 +30,7 @@ case "$1" in
               vaultwarden > $OUT
         fi
 
-        chown -R vaultwarden.vaultwarden /usr/share/vaultwarden
+        chown -R vaultwarden:vaultwarden /usr/share/vaultwarden
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
