@@ -125,7 +125,7 @@ Repository updated on """ + datetime.datetime.now().strftime('%Y.%m.%d') + """.
 
 for release, info in DEBIAN_RELEASES.items():
     print("""
-<p>To install Vaultwarden and add this repository, run this for Debian """ + f'{info["version"]} ({release})' + """):</p>
+<p>To install Vaultwarden and add this repository, run this for Debian """ + f'{info["version"]} ({release})' + """:</p>
 <pre>
 wget -qO- https://vaultwarden-deb.pages.dev/dists/""" + release + """/install.sh | sudo bash
 sudo apt update
