@@ -16,29 +16,5 @@ cp 404.html repo/
 
 cd repo/
 
-cat <<EOF > index.html
-<html>
-<head><title>Vaultwarden deb repository</title></head>
-<body>
-<h1>Vaultwarden deb repository</h1>
-<p>
-This repository contains deb packages of Vaultwarden, a Bitwarden-compatible API server written in Rust. They can be installed in Debian or Ubuntu.
-</p>
-<p>
-See the <a href="https://github.com/gvtulder/vaultwarden-deb/">GitHub repository</a> for more information.
-</p>
-<p>
-Files:
-</p>
-<ul>
-EOF
-
-find * -type f | sort --version-sort | grep -v by-hash | grep -v .html | while read filename ; do
-  echo '  <li><a href="'$filename'">'$filename'</a></li>' >> index.html
-done
-
-cat <<EOF >> index.html
-</ul>
-</html>
-EOF
+python ../build-pages-html.py > index.html
 
