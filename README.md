@@ -38,7 +38,7 @@ sudo apt update
 sudo apt install vaultwarden
 ```
 
-The packages can also be downloaded manually from the [Releases page](https://github.com/gvtulder/vaultwarden-deb/releases).
+The packages can also be downloaded manually from the [repository web page](https://vaultwarden-deb.pages.dev/).
 
 ## Important configuration
 
