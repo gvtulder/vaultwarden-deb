@@ -15,7 +15,7 @@ DEBIAN_RELEASES = {
 }
 ARCHITECTURES = [ "amd64" ]
 
-IGNORED_DIRS = set([ "by-hash" ])
+IGNORED_PATHS = set([ "by-hash", "index.html", "404.html" ])
 
 
 def get_version(filename):
@@ -144,7 +144,7 @@ print("""
 def print_file_tree(path=".", indent=""):
     with os.scandir(path) as it:
         for entry in sorted(it, key=lambda e: (e.is_dir(), e.name)):
-            if entry.name in IGNORED_DIRS:
+            if entry.name in IGNORED_PATHS:
                 pass
             elif entry.is_dir():
                 print(f'{indent}<li>{entry.name}')
