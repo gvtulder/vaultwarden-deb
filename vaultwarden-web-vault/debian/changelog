@@ -1,3 +1,9 @@
+vaultwarden-web-vault (2024.6.2b-1) unstable; urgency=medium
+
+  * Update to upstream version v2024.6.2b.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Fri,  9 Aug 2024 02:45:32 +0000
+
 vaultwarden-web-vault (2024.6.2-1) unstable; urgency=medium
 
   * Update to upstream version v2024.6.2.
