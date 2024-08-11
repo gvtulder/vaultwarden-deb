@@ -3,7 +3,11 @@ set -e
 set -x
 
 SOURCE_URL=https://github.com/dani-garcia/vaultwarden/archive/refs/tags/${VW_SERVER_VERSION}.tar.gz
-RUST_IMAGE=rust:1.80-${DEBIAN_TARGET_VERSION}
+if [[ $DEBIAN_TARGET_VERSION == buster ]] ; then
+  RUST_IMAGE=rust:1.79-${DEBIAN_TARGET_VERSION}
+else
+  RUST_IMAGE=rust:1.80-${DEBIAN_TARGET_VERSION}
+fi
 
 # download latest source
 wget -O vaultwarden.tar.gz $SOURCE_URL
