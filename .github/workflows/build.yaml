@@ -13,12 +13,12 @@ jobs:
 
     steps:
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: 3.12
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -52,12 +52,12 @@ jobs:
         sudo apt-get -qy install debhelper dpkg-sig
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: 3.12
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -154,7 +154,7 @@ jobs:
         ./sync-s3.sh repo/ s3://${{ secrets.AWS_S3_BUCKET }}/
 
     - name: Archive .deb files, public keys, APT files
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: output-${{ matrix.debian }}
         path: repo/
@@ -171,12 +171,12 @@ jobs:
         sudo apt-get -qy install debhelper dpkg-sig
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: 3.9
 
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Install dependencies
       run: |
@@ -191,7 +191,7 @@ jobs:
         passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
     - name: Download all workflow run artifacts
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         path: repo-src/
 
@@ -222,7 +222,7 @@ jobs:
         ./sync-s3.sh repo/dists/${{ matrix.debian }} s3://${{ secrets.AWS_S3_BUCKET }}/dists/${{ matrix.debian }}
 
     - name: Archive repository files
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: combined-repository
         path: repo/
