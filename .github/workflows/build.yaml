@@ -49,7 +49,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -q update
-        sudo apt-get -qy install debhelper debsigs
+        sudo apt-get -qy install debhelper debsigs build-essential
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -168,7 +168,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -q update
-        sudo apt-get -qy install debhelper debsigs
+        sudo apt-get -qy install debhelper debsigs build-essential
 
     - name: Set up Python
       uses: actions/setup-python@v5
