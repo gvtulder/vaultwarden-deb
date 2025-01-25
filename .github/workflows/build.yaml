@@ -49,7 +49,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -q update
-        sudo apt-get -qy install debhelper dpkg-sig
+        sudo apt-get -qy install debhelper debsigs
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -99,7 +99,7 @@ jobs:
         if [[ ! -f repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/vaultwarden_${{ env.VW_SERVER_VERSION_DEB }}_${{ matrix.debian-arch }}.deb ]] ; then
           cd vaultwarden/
           ./build-in-docker.sh
-          dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder vaultwarden_*.deb
+          debsigs -k ${{ steps.import_gpg.outputs.keyid }} --sign builder vaultwarden_*.deb
           mv vaultwarden_*.deb ../repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/
           cd ..
         fi
@@ -109,7 +109,7 @@ jobs:
         if [[ ! -f repo/dists/${{ matrix.DEBIAN }}/main/binary-${{ matrix.debian-arch }}/vaultwarden-web-vault_${{ env.VW_WEB_VERSION_DEB }}_all.deb ]] ; then
           cd vaultwarden-web-vault/
           make deb
-          dpkg-sig -k ${{ steps.import_gpg.outputs.keyid }} --sign builder ../vaultwarden-web-vault_*.deb
+          debsigs -k ${{ steps.import_gpg.outputs.keyid }} --sign builder ../vaultwarden-web-vault_*.deb
           mv ../vaultwarden-web-vault_*.deb ../repo/dists/${{ matrix.debian }}/main/binary-${{ matrix.debian-arch }}/
           cd ..
         fi
@@ -168,7 +168,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get -q update
-        sudo apt-get -qy install debhelper dpkg-sig
+        sudo apt-get -qy install debhelper debsigs
 
     - name: Set up Python
       uses: actions/setup-python@v5
