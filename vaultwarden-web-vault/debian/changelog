@@ -1,3 +1,9 @@
+vaultwarden-web-vault (2025.5.0-1) unstable; urgency=medium
+
+  * Update to upstream version v2025.5.0.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Tue, 27 May 2025 03:17:11 +0000
+
 vaultwarden-web-vault (2025.1.1-1) unstable; urgency=medium
 
   * Update to upstream version v2025.1.1.

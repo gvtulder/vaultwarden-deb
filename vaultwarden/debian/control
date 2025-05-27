@@ -8,7 +8,7 @@ Rules-Requires-Root: no
 
 Package: vaultwarden
 Architecture: amd64
-Depends: vaultwarden-web-vault (>= 2025.1.1), libmariadb-dev-compat, libpq5
+Depends: vaultwarden-web-vault (>= 2025.5.0), libmariadb-dev-compat, libpq5
 Description: Unofficial Bitwarden compatible server written in Rust
  Alternative implementation of the Bitwarden server API written in
  Rust and compatible with upstream Bitwarden clients*, perfect for
