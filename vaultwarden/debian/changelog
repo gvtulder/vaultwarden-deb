@@ -1,3 +1,10 @@
+vaultwarden (1.34.2-1) unstable; urgency=medium
+
+  * Update to upstream version 1.34.2.
+  * Require upstream version v2025.7.0.
+
+ -- Gijs van Tulder <gvtulder@gmail.com>  Mon, 28 Jul 2025 03:51:07 +0000
+
 vaultwarden (1.34.1-1) unstable; urgency=medium
 
   * Update to upstream version 1.34.1.
