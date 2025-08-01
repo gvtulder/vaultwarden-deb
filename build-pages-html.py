@@ -11,7 +11,6 @@ from distutils.version import LooseVersion
 DEBIAN_RELEASES = {
     "bookworm": { "version": 12 },
     "bullseye": { "version": 11 },
-    "buster": { "version": 10 },
 }
 ARCHITECTURES = [ "amd64" ]
 
