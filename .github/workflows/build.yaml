@@ -42,7 +42,7 @@ jobs:
 
     strategy:
       matrix:
-        debian: ["buster", "bullseye", "bookworm"]
+        debian: ["bullseye", "bookworm"]
         debian-arch: ["amd64"]
 
     steps:
