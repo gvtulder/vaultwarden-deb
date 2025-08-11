@@ -17,16 +17,9 @@ Use `apt-get install vaultwarden` to install both.
 
 ## Installation
 
-To install Vaultwarden and add this repository, run this for Debian 12 (bookworm):
+To install Vaultwarden and add this repository, run this for Debian 13 (trixie):
 ```bash
-wget -qO- https://vaultwarden-deb.pages.dev/dists/bookworm/install.sh | sudo bash
-sudo apt update
-sudo apt install vaultwarden
-```
-
-For Debian 11 (bullseye):
-```bash
-wget -qO- https://vaultwarden-deb.pages.dev/dists/bullseye/install.sh | sudo bash
+wget -qO- https://vaultwarden-deb.pages.dev/dists/trixie/install.sh | sudo bash
 sudo apt update
 sudo apt install vaultwarden
 ```
@@ -38,9 +31,9 @@ sudo apt update
 sudo apt install vaultwarden
 ```
 
-For Debian 13 (trixie):
+For Debian 11 (bullseye):
 ```bash
-wget -qO- https://vaultwarden-deb.pages.dev/dists/trixie/install.sh | sudo bash
+wget -qO- https://vaultwarden-deb.pages.dev/dists/bullseye/install.sh | sudo bash
 sudo apt update
 sudo apt install vaultwarden
 ```
