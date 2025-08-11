@@ -9,6 +9,7 @@ from distutils.version import LooseVersion
 
 
 DEBIAN_RELEASES = {
+    "trixie": { "version": 13 },
     "bookworm": { "version": 12 },
     "bullseye": { "version": 11 },
 }
