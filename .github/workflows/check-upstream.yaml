@@ -44,6 +44,7 @@ jobs:
         fi
 
     - name: Dispatch build workflow
+      if: ${{ env.VW_HAS_UPDATE == 'true' }}
       uses: benc-uk/workflow-dispatch@v1
       with:
         workflow: build.yaml
