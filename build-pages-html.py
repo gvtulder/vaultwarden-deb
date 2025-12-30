@@ -9,9 +9,9 @@ from distutils.version import LooseVersion
 
 
 DEBIAN_RELEASES = {
-    "trixie": { "version": 13 },
-    "bookworm": { "version": 12 },
-    "bullseye": { "version": 11 },
+    "trixie": { "version": 13, "archived": False },
+    "bookworm": { "version": 12, "archived": False },
+    "bullseye": { "version": 11, "archived": True },
 }
 ARCHITECTURES = [ "amd64" ]
 
@@ -105,6 +105,10 @@ See the <a href="https://github.com/gvtulder/vaultwarden-deb/">GitHub repository
 for idx, ((release, arch), files) in enumerate(latest_versions.items()):
     print('  <tr class="current">')
     print(f'    <th class="release">Debian {DEBIAN_RELEASES[release]["version"]} ({release})</th>')
+    if DEBIAN_RELEASES[release]["archived"]:
+        print(f'    <th>archived</th>')
+    else:
+        print(f'    <th></th>')
     print(f'    <th class="arch">{arch}</th>')
     for file in files:
         print(f'    <td><a href="{file}">{os.path.basename(file)}</a></td>')
@@ -124,7 +128,8 @@ Repository updated on """ + datetime.datetime.now().strftime('%Y.%m.%d') + """.
 
 
 for release, info in DEBIAN_RELEASES.items():
-    print("""
+    if not info["archived"]:
+        print("""
 <p>To install Vaultwarden and add this repository, run this for Debian """ + f'{info["version"]} ({release})' + """:</p>
 <pre>
 wget -qO- https://vaultwarden-deb.pages.dev/dists/""" + release + """/install.sh | sudo bash
