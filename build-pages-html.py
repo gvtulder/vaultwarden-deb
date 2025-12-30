@@ -2,7 +2,7 @@ import datetime
 import glob
 import re
 import os.path
-from distutils.version import LooseVersion
+import packaging.version
 
 
 # generates the index page for the repository
@@ -21,7 +21,7 @@ IGNORED_PATHS = set([ "by-hash", "index.html", "404.html" ])
 def get_version(filename):
     m = re.match(".+_([^_]+)_[^_]+\.deb", filename)
     if m:
-        return m[1]
+        return packaging.version.parse(m[1])
     else:
         return filename
 
