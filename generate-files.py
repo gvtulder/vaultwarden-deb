@@ -32,7 +32,7 @@ any_updates = False
 # update web vault changelog
 with open('vaultwarden-web-vault/debian/changelog', 'r') as f:
     web_changelog = f.read()
-m = re.match(r'vaultwarden-web-vault \(([0-9a-z.]+)[-+]([a-z0-9.-]+)\)', web_changelog)
+m = re.match(r'vaultwarden-web-vault \(([0-9a-z.+]+)-([0-9]+)\)', web_changelog)
 assert m
 current_web_version = m.group(1)
 web_version_deb = '%s-%s' % (m.group(1), m.group(2))
@@ -56,7 +56,7 @@ if current_web_version != web_version_clean:
 # update server changelog
 with open('vaultwarden/debian/changelog', 'r') as f:
     server_changelog = f.read()
-m = re.match(r'vaultwarden \(([0-9a-z.]+)-([0-9]+)\)', server_changelog)
+m = re.match(r'vaultwarden \(([0-9a-z.+]+)-([0-9]+)\)', server_changelog)
 assert m
 current_server_version = m.group(1)
 server_version_deb = '%s-%s' % (m.group(1), m.group(2))
