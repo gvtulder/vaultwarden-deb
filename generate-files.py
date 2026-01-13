@@ -77,7 +77,7 @@ if current_server_version != server_version_clean:
     # update server control, require latest web vault version
     with open('vaultwarden/debian/control', 'r') as f:
         server_control = f.read()
-    server_control = re.sub(r'vaultwarden-web-vault \(>= [0-9a-z.]+\)',
+    server_control = re.sub(r'vaultwarden-web-vault \(>= [0-9a-z.+]+\)',
                             'vaultwarden-web-vault (>= %s)' % web_version_clean,
                             server_control)
     with open('vaultwarden/debian/control', 'w') as f:
