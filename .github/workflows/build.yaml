@@ -211,6 +211,21 @@ jobs:
         gpg --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.gpg
         gpg --armor --export ${{ steps.import_gpg.outputs.keyid }} > repo/vaultwarden-deb-repo-keyring.asc
 
+    - name: Generate install.sh scripts
+      run: |
+        for release in bookworm trixie ; do
+          cp install.sh repo/dists/$release/install.sh
+          sed -i 's/DEBIAN_TARGET_VERSION=[a-z]+/DEBIAN_TARGET_VERSION='$release'/' repo/dists/$release/install.sh
+          sed -i 's/BASEURL=.\+/BASEURL=https:\/\/vaultwarden-deb.pages.dev/' repo/dists/$release/install.sh
+          sed -i 's/RELEASE=.\+/RELEASE="'$release' main"/' repo/dists/$release/install.sh
+        done
+
+    - name: Build index.html
+      run: |
+        cd repo
+        python ../build-pages-html.py > index.html
+        cd ..
+
     - name: Upload updated repo
       env:
         AWS_S3_ENDPOINT: ${{ secrets.AWS_S3_ENDPOINT }}
@@ -220,6 +235,7 @@ jobs:
         AWS_REGION: auto
       run: |
         ./sync-s3.sh repo/dists/${{ matrix.debian }} s3://${{ secrets.AWS_S3_BUCKET }}/dists/${{ matrix.debian }}
+        ./sync-s3.sh repo/index.html s3://${{ secrets.AWS_S3_BUCKET }}/index.html
 
     - name: Archive repository files
       uses: actions/upload-artifact@v7

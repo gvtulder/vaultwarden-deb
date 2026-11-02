@@ -19,7 +19,7 @@ IGNORED_PATHS = set([ "by-hash", "index.html", "404.html" ])
 
 
 def get_version(filename):
-    m = re.match(".+_([^_]+)_[^_]+\.deb", filename)
+    m = re.match(r".+_([^_]+)_[^_]+\\.deb", filename)
     if m:
         return packaging.version.parse(m[1])
     else:
