@@ -8,7 +8,7 @@ mkdir -p repo
 for release in bullseye bookworm trixie ; do
   cp install.sh repo/dists/$release/install.sh
   sed -i 's/DEBIAN_TARGET_VERSION=[a-z]+/DEBIAN_TARGET_VERSION='$release'/' repo/dists/$release/install.sh
-  sed -i 's/BASEURL=.\+/BASEURL=https:\/\/vaultwarden-deb.pages.dev/' repo/dists/$release/install.sh
+  sed -i 's/BASEURL=.\+/BASEURL=https:\/\/vaultwarden-deb.vantulder.net/' repo/dists/$release/install.sh
   sed -i 's/RELEASE=.\+/RELEASE="'$release' main"/' repo/dists/$release/install.sh
 done
 

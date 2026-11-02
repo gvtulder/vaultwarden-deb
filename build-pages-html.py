@@ -132,7 +132,7 @@ for release, info in DEBIAN_RELEASES.items():
         print("""
 <p>To install Vaultwarden and add this repository, run this for Debian """ + f'{info["version"]} ({release})' + """:</p>
 <pre>
-wget -qO- https://vaultwarden-deb.pages.dev/dists/""" + release + """/install.sh | sudo bash
+wget -qO- https://vaultwarden-deb.vantulder.net/dists/""" + release + """/install.sh | sudo bash
 sudo apt update
 sudo apt install vaultwarden
 </pre>
