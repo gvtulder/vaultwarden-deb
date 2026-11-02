@@ -11,7 +11,7 @@ import packaging.version
 DEBIAN_RELEASES = {
     "trixie": { "version": 13, "archived": False },
     "bookworm": { "version": 12, "archived": False },
-    "bullseye": { "version": 11, "archived": True },
+#   "bullseye": { "version": 11, "archived": True },
 }
 ARCHITECTURES = [ "amd64" ]
 
