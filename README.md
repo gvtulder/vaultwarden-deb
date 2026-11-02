@@ -31,13 +31,6 @@ sudo apt update
 sudo apt install vaultwarden
 ```
 
-For Debian 11 (bullseye):
-```bash
-wget -qO- https://vaultwarden-deb.vantulder.net/dists/bullseye/install.sh | sudo bash
-sudo apt update
-sudo apt install vaultwarden
-```
-
 The packages can also be downloaded manually from the [repository web page](https://vaultwarden-deb.vantulder.net/).
 
 ## Important configuration
